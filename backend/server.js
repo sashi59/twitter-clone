@@ -1,9 +1,10 @@
-const express = require("express")
-const cookieParser = require("cookie-parser")
-const dotenv = require("dotenv")
-const mongoose = require("mongoose")
+import express from "express";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-const authRouter = require("./routes/user.route");
+
+import authRouter from "./routes/user.route.js"
 
 dotenv.config();
 
@@ -25,3 +26,15 @@ app.get("/", (req, res) => {
 
 
 app.listen(PORT, console.log(`Server Started at PORT: ${PORT}`));
+
+
+
+
+// if(!x){
+
+//     return res.status(400).json({error:""})
+// }
+
+
+// console.log("Error in x", error.messege)
+// return res.status(500).json({error:"Internal Server Error"})
