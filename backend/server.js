@@ -1,12 +1,20 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import {v2 as cloudinary} from "cloudinary";
 import mongoose from "mongoose";
 
 
-import authRouter from "./routes/user.route.js"
+import authRouter from "./routes/auth.Route.js"
+import userRouter from "./routes/user.Route.js"
 
 dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+ });
 
 const app = express();
 const PORT = process.env.PORT||  9000;
@@ -18,6 +26,8 @@ app.use(express.urlencoded({ extended:false }));
 app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+
 
 app.get("/", (req, res) => {
     res.json("home");    
