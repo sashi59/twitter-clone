@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import authRouter from "./routes/auth.Route.js"
 import userRouter from "./routes/user.Route.js"
 import postRouter from  "./routes/post.Route.js"
+import notificationRouter from  "./routes/notification.Route.js"
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
+app.use("/api/notification", notificationRouter);
 
 
 
@@ -39,14 +41,6 @@ app.get("/", (req, res) => {
 
 
 app.listen(PORT, console.log(`Server Started at PORT: ${PORT}`));
-
-
-
-
-// if(!x){
-
-//     return res.status(400).json({error:""})
-// }
 
 
 // console.log("Error in x", error.messege)
