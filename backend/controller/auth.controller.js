@@ -6,49 +6,62 @@ export const signupUser = async (req, res) => {
     try {
         const { fullName, username, email, password } = req.body;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Email format validation
         if (!emailRegex.test(email)) {
             return res.status(400).json({ error: "Invalid email format" });
         }
+
+        // Check if username exists
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ error: "Username is already taken" });
         }
+
+        // Check if email exists
         const existingEmail = await User.findOne({ email });
         if (existingEmail) {
             return res.status(400).json({ error: "Email is already taken" });
         }
+
+        // Password length validation
         if (password.length < 6) {
             return res.status(400).json({ error: "Password must be at least 6 characters long" });
         }
+
+        // Hash the password and create a new user
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const newUser = await User.create({
+        const newUser = new User({
             fullName,
             username,
             email,
             password: hashedPassword,
         });
-        if (newUser) {
-            generateTokenAndSetCookie(newUser._id, res);
-            await newUser.save();
-            res.status(201).json({
-                _id: newUser._id,
-                fullName: newUser.fullName,
-                username: newUser.username,
-                email: newUser.email,
-                followers: newUser.followers,
-                following: newUser.following,
-                profileImg: newUser.profileImg,
-                coverImg: newUser.coverImg,
-            });
-        } else {
-            res.status(400).json({ error: "Invalid user data" });
-        }
+
+        // Save user and generate token
+        await newUser.save();
+        generateTokenAndSetCookie(newUser._id, res);
+
+        // Send success response
+        return res.status(201).json({
+            _id: newUser._id,
+            fullName: newUser.fullName,
+            username: newUser.username,
+            email: newUser.email,
+            followers: newUser.followers,
+            following: newUser.following,
+            profileImg: newUser.profileImg,
+            coverImg: newUser.coverImg,
+        });
+        
     } catch (error) {
         console.log("Error in signup controller", error.message);
-        res.status(500).json({ error: "Internal Server Error" });
+        // Handle server error
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
 
 export const signinUser = async (req, res) => {
 
