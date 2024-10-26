@@ -64,34 +64,31 @@ export const signupUser = async (req, res) => {
 
 
 export const signinUser = async (req, res) => {
-
     try {
         const { username, password } = req.body;
 
-
         const user = await User.findOne({ username: username });
-        const isPasswordCorrect = await bcrypt.compare(password, user?.password || "")
-
         if (!user) {
-            res.status(404).json({ error: "User Not Found" });
-
+            return res.status(404).json({ error: "User Not Found" });
         }
-        if(!isPasswordCorrect){
-            res.status(404).json({ error: "Password incorrect" });
 
+        const isPasswordCorrect = await bcrypt.compare(password, user.password || "");
+        if (!isPasswordCorrect) {
+            return res.status(404).json({ error: "Password incorrect" });
         }
+
         generateTokenAndSetCookie(user._id, res);
         await user.save();
 
-
         const { password: _, ...userWithoutPassword } = user.toObject();
-        return res.status(200).json({ user: userWithoutPassword })
-
+        return res.status(200).json({ user: userWithoutPassword });
+        
     } catch (error) {
         console.log("Error in signin controller", error.message);
         res.status(500).json({ error: "Internal Server Error" });
     }
-}
+};
+
 
 export const logoutUser = async (req, res)=>{
     try {
