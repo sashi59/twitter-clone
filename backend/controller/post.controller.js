@@ -38,8 +38,13 @@ export const createPost = async (req, res) => {
         }
 
         if (img) {
-            const responseUpload = await cloudinary.uploader.upload(img);
-            img = responseUpload.secure_url;
+            try {
+                const responseUpload = await cloudinary.uploader.upload(img);
+                img = responseUpload.secure_url;
+            } catch (error) {
+                console.error("Error uploading to Cloudinary:", error);
+                return res.status(500).json({ error: "Image upload failed" });
+            }
         }
 
         const newPost = await Post.create({
