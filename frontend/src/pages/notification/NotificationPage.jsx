@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 const NotificationPage = () => {
 	const queryClient = useQueryClient();
 	const {data: notifications, isLoading} = useQuery({
-		queryKey: "notifications",
+		queryKey: ["notifications"],
 		queryFn: async ()=>{
 			try {
 				const res = await fetch("/api/notification")
