@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import {v2 as cloudinary} from "cloudinary";
 import mongoose from "mongoose";
+import path from "path";
 
 
 import authRouter from "./routes/auth.Route.js"
@@ -20,6 +21,7 @@ cloudinary.config({
 
 const app = express();
 const PORT = process.env.PORT||  9000;
+const __dirname = path.resolve();
 
 mongoose.connect(process.env.MONGO_URI).then(()=> console.log("MongoDb Connected"))
 
@@ -39,6 +41,14 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/notification", notificationRouter);
+
+if(process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname, "frontend/dist")));
+
+    app.get("*", (req, res)=>{
+        res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+    })
+}
 
 
 
