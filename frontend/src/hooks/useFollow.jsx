@@ -9,7 +9,7 @@ import {useQueryClient, useMutation} from "@tanstack/react-query"
     const {mutate: follow, isPending, } =  useMutation({
         mutationFn: async (userId)=>{
             try {
-                const res = await fetch(`api/user/follow/${userId}`, {
+                const res = await fetch(`/api/user/follow/${userId}`, {
                     method: "POST",
                 })
                 const data = await res.json();
@@ -22,11 +22,11 @@ import {useQueryClient, useMutation} from "@tanstack/react-query"
         },
         onSuccess:()=>{
             toast.success("Following successful!");
-            Promise.all(
+            Promise.all([
 
                 queryClient.invalidateQueries({queryKey: ["authUser"]}),
                 queryClient.invalidateQueries({queryKey: ["suggestedUsers"]})
-            )
+            ])
         },
         onError:(error)=>{
             toast.error(error.message);
