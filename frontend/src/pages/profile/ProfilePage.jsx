@@ -98,7 +98,7 @@ const ProfilePage = () => {
 
 	useEffect(()=>{
 		refetch();
-	}, [refetch, username])
+	}, [refetch, username, authUser])
 
 	return (
 		<>
