@@ -23,7 +23,7 @@ const PORT = process.env.PORT||  9000;
 
 mongoose.connect(process.env.MONGO_URI).then(()=> console.log("MongoDb Connected"))
 
-app.use(express.json());
+app.use(express.json({limit:"5mb"}));
 app.use(express.urlencoded({ extended:false }));
 app.use(cookieParser());
 // Example for setting timeout in Express app (in your main app file)

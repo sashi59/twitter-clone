@@ -92,7 +92,7 @@ export const getSuggestedUser = async (req, res) => {
         const suggestedUser = filterUser.slice(0, 4);
         suggestedUser.forEach((user) => (user.password = null));
 
-        return res.status(200).json({ suggestedUser });
+        return res.status(200).json(suggestedUser);
     } catch (error) {
         console.log("Error in getSuggestedUser", error)
         return res.status(500).json({ error: "Internal Server Error" })
