@@ -7,7 +7,7 @@ import path from "path";
 
 
 import authRouter from "./routes/auth.Route.js"
-import userRouter from "./routes/user.Route.js"
+import userRouter from "./routes/user.route.js"
 import postRouter from  "./routes/post.Route.js"
 import notificationRouter from  "./routes/notification.Route.js"
 
@@ -44,7 +44,6 @@ app.use("/api/notification", notificationRouter);
 
 if(process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname, "frontend/dist")));
-
     app.get("*", (req, res)=>{
         res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
     })
